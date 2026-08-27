@@ -6,222 +6,382 @@
     <title>Predicting Search Visibility Decay & Opportunity Scoring | Research Paper</title>
     <style>
         :root {
-            --primary: #0f172a;
-            --accent: #2563eb;
-            --bg: #f8fafc;
-            --surface: #ffffff;
-            --text: #334155;
-            --border: #e2e8f0;
+            --primary-color: #0f172a;
+            --accent-color: #2563eb;
+            --bg-color: #f8fafc;
+            --surface-color: #ffffff;
+            --text-primary: #1e293b;
+            --text-secondary: #475569;
+            --border-color: #e2e8f0;
+            --code-bg: #f1f5f9;
         }
+
         body {
-            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, sans-serif;
+            font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+            background-color: var(--bg-color);
+            color: var(--text-primary);
             line-height: 1.7;
-            color: var(--text);
-            background: var(--bg);
             margin: 0;
             padding: 0;
         }
+
+        .paper-header {
+            background-color: var(--surface-color);
+            border-bottom: 1px solid var(--border-color);
+            padding: 3.5rem 0 2.5rem 0;
+        }
+
         .container {
-            max-width: 900px;
+            max-width: 860px;
             margin: 0 auto;
-            padding: 2rem 1.5rem;
+            padding: 0 1.5rem;
         }
-        header {
-            background: var(--surface);
-            border-bottom: 1px solid var(--border);
-            padding: 3rem 0;
-            margin-bottom: 2rem;
-        }
-        h1 {
-            color: var(--primary);
+
+        h1.paper-title {
             font-size: 2.25rem;
+            font-weight: 700;
+            color: var(--primary-color);
             line-height: 1.25;
-            margin-bottom: 1rem;
+            margin-bottom: 1.25rem;
+            letter-spacing: -0.02em;
         }
-        .meta {
-            font-size: 0.9rem;
-            color: #64748b;
-            margin-bottom: 1.5rem;
+
+        .author-block {
+            font-size: 1rem;
+            color: var(--text-secondary);
+            margin-bottom: 2rem;
+            display: flex;
+            gap: 1.5rem;
+            flex-wrap: wrap;
         }
-        .abstract {
-            background: #f1f5f9;
-            border-left: 4px solid var(--accent);
-            padding: 1.25rem;
+
+        .author-block span {
+            display: inline-flex;
+            align-items: center;
+        }
+
+        .author-block strong {
+            color: var(--primary-color);
+            margin-right: 0.35rem;
+        }
+
+        .abstract-card {
+            background-color: #eff6ff;
+            border-left: 4px solid var(--accent-color);
+            padding: 1.5rem;
             border-radius: 0 8px 8px 0;
             margin-bottom: 2rem;
-            font-size: 1.05rem;
         }
-        h2 {
-            color: var(--primary);
-            border-bottom: 2px solid var(--border);
-            padding-bottom: 0.5rem;
+
+        .abstract-title {
+            font-weight: 700;
+            text-transform: uppercase;
+            font-size: 0.85rem;
+            letter-spacing: 0.05em;
+            color: var(--accent-color);
+            margin-bottom: 0.5rem;
+        }
+
+        .abstract-text {
+            font-size: 1.025rem;
+            color: var(--text-primary);
+            margin: 0;
+        }
+
+        section {
             margin-top: 2.5rem;
+            margin-bottom: 2.5rem;
         }
+
+        h2 {
+            font-size: 1.45rem;
+            font-weight: 600;
+            color: var(--primary-color);
+            border-bottom: 2px solid var(--border-color);
+            padding-bottom: 0.4rem;
+            margin-top: 2rem;
+            letter-spacing: -0.01em;
+        }
+
+        h3 {
+            font-size: 1.15rem;
+            font-weight: 600;
+            color: var(--primary-color);
+            margin-top: 1.5rem;
+        }
+
+        p, li {
+            font-size: 1rem;
+            color: var(--text-secondary);
+        }
+
+        ul {
+            padding-left: 1.25rem;
+        }
+
+        li {
+            margin-bottom: 0.5rem;
+        }
+
+        code {
+            font-family: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, monospace;
+            background-color: var(--code-bg);
+            color: #0f172a;
+            padding: 0.15rem 0.4rem;
+            border-radius: 4px;
+            font-size: 0.875em;
+        }
+
+        .table-wrapper {
+            overflow-x: auto;
+            margin: 1.5rem 0;
+        }
+
         table {
             width: 100%;
             border-collapse: collapse;
-            margin: 1.5rem 0;
-            background: var(--surface);
+            background-color: var(--surface-color);
             border-radius: 8px;
             overflow: hidden;
-            box-shadow: 0 1px 3px rgba(0,0,0,0.1);
+            box-shadow: 0 1px 3px rgba(0, 0, 0, 0.05);
+            border: 1px solid var(--border-color);
         }
+
         th, td {
-            padding: 0.75rem 1rem;
+            padding: 0.85rem 1rem;
             text-align: left;
-            border-bottom: 1px solid var(--border);
+            border-bottom: 1px solid var(--border-color);
+            font-size: 0.95rem;
         }
+
         th {
-            background: #f1f5f9;
-            color: var(--primary);
+            background-color: #f8fafc;
+            color: var(--primary-color);
             font-weight: 600;
         }
+
+        tr:last-child td {
+            border-bottom: none;
+        }
+
         .badge {
             display: inline-block;
-            padding: 0.25rem 0.5rem;
+            padding: 0.25rem 0.55rem;
             border-radius: 4px;
-            font-size: 0.8rem;
-            font-weight: 600;
+            font-size: 0.775rem;
+            font-weight: 700;
+            letter-spacing: 0.02em;
         }
-        .badge-refresh { background: #fee2e2; color: #991b1b; }
-        .badge-update { background: #fef3c7; color: #92400e; }
-        .badge-monitor { background: #dcfce7; color: #166534; }
+
+        .badge-refresh { background-color: #fee2e2; color: #991b1b; }
+        .badge-update  { background-color: #fef3c7; color: #92400e; }
+        .badge-monitor { background-color: #dcfce7; color: #166534; }
+
+        .callout-box {
+            background-color: var(--surface-color);
+            border: 1px solid var(--border-color);
+            border-radius: 8px;
+            padding: 1.25rem;
+            margin: 1.5rem 0;
+        }
+
         footer {
             margin-top: 4rem;
-            padding: 2rem 0;
-            border-top: 1px solid var(--border);
-            font-size: 0.9rem;
-            color: #64748b;
+            padding: 2.5rem 0;
+            border-top: 1px solid var(--border-color);
+            background-color: var(--surface-color);
             text-align: center;
+            font-size: 0.9rem;
+            color: var(--text-secondary);
         }
-        footer a { color: var(--accent); text-decoration: none; }
-        footer a:hover { text-decoration: underline; }
+
+        footer a {
+            color: var(--accent-color);
+            text-decoration: none;
+            font-weight: 500;
+        }
+
+        footer a:hover {
+            text-decoration: underline;
+        }
     </style>
 </head>
 <body>
 
-<header>
+<header class="paper-header">
     <div class="container">
-        <h1>Predicting Search Visibility Decay & Automated Opportunity Scoring on Portfolio-Scale Content</h1>
-        <div class="meta">
-            Published: August 2026 &bull; Lane 2: Content Refresh Opportunity Scoring &bull; FlyRank ML Capstone
+        <h1 class="paper-title">Predicting Search Visibility Decay & Opportunity Scoring on Portfolio-Scale Content</h1>
+        
+        <div class="author-block">
+            <span><strong>Author:</strong> Ewan John Dennis</span>
+            <span>&bull;</span>
+            <span><strong>Lane:</strong> Lane 2 — Content Refresh Opportunity Scoring</span>
+            <span>&bull;</span>
+            <span><strong>Date:</strong> August 2026</span>
         </div>
-        <div class="abstract">
-            <strong>Abstract:</strong> Search engine optimization teams encounter operational bottlenecks when identifying decaying content across large domains. Traditional manual audits fail to scale, while heuristic queues over-weight raw impression scale rather than refresh urgency. We engineered non-linear decay signals from historical impression volume, indexing frequency, and content age, training a Random Forest classifier evaluated under strict client-grouped cross-validation (<code>GroupKFold</code>). The model achieved an observed Average Precision (PR-AUC) of <strong>0.999654</strong> and ROC-AUC of <strong>0.967390</strong>, significantly outperforming rule baselines. Outputs were deployed into a 3-tier content decision-support playbook (<code>IMMEDIATE_REFRESH</code>: 24.42%, <code>SCHEDULED_UPDATE</code>: 20.98%, <code>MONITOR</code>: 54.60%).
+
+        <div class="abstract-card">
+            <div class="abstract-title">Abstract</div>
+            <p class="abstract-text">
+                Search engine optimization (SEO) teams encounter operational bottlenecks when identifying decaying content across large domain portfolios. Traditional manual audits fail to scale, while heuristic queues over-weight raw impression scale rather than refresh urgency. We engineered non-linear decay signals from historical impression volume, indexing frequency, and content age, training a Random Forest classifier evaluated under strict client-grouped cross-validation (<code>GroupKFold</code>). The candidate model achieved an observed Average Precision (PR-AUC) of <strong>0.999654</strong> and ROC-AUC of <strong>0.967390</strong>, significantly outperforming hand-crafted rule baselines. Outputs were deployed into a 3-tier content decision-support playbook (<code>IMMEDIATE_REFRESH</code>: 24.42%, <code>SCHEDULED_UPDATE</code>: 20.98%, <code>MONITOR</code>: 54.60%).
+            </p>
         </div>
     </div>
-    
 </header>
 
-<div class="container">
+<main class="container">
 
-    <h2>1. Introduction & Problem Statement</h2>
-    <p>This research evaluates automated content refresh scoring using production 
-  search data from the <strong>FlyRank ML Internship dataset</strong>. Enterprise SEO 
-  operations managing multi-client domain portfolios face a critical challenge: 
-  identifying decaying content before search traffic drops significantly. 
-  Traditional manual audits fail to scale across hundreds of thousands of pages, 
-  while simple heuristic queues over-weight raw impression scale—flagging massive, 
-  stable pages while missing long-tail content experiencing severe recency-driven decay. 
-  This case study develops and validates a machine-learning decision-support pipeline 
-  to address FlyRank's portfolio-scale content scoring problem.</p>
+    <section>
+        <h2>1. Introduction & Problem Statement</h2>
+        <p>
+            This research evaluates automated content refresh opportunity scoring using production search performance data from the <strong>FlyRank ML Internship dataset</strong>. Enterprise search engine optimization teams managing multi-client domain portfolios face a critical operational bottleneck: identifying decaying content before search traffic drops significantly.
+        </p>
+        <p>
+            Traditional manual audits fail to scale across hundreds of thousands of pages, while standard rule-based heuristic queues over-weight raw impression magnitude. Consequently, massive evergreen pages hit upper score thresholds regardless of stability, while moderate-traffic long-tail URLs experiencing rapid decay remain unflagged. This research formulates and validates a non-linear machine learning decision-support queue to address FlyRank's portfolio-scale scoring problem.
+        </p>
+    </section>
 
-    <h2>2. Data & Safety Controls</h2>
-    <p>The dataset evaluates snapshot <code>month=2026-03</code> from the FlyRank ML Warehouse (<code>fact_content_daily_performance</code> and <code>dim_content</code>). Features are computed from days 1–30, while target decay outcomes are evaluated on days 31–60. Unindexed pages (<code>imp_prev30 = 0</code>) are excluded by contract. All client identifiers are hashed (<code>client_hash_id</code>), ensuring zero client domain leakage or private data exposure.</p>
+    <section>
+        <h2>2. Data Overview & Safety Controls</h2>
+        <p>
+            The dataset evaluates snapshot <code>month = '2026-03'</code> from the FlyRank ML Warehouse (combining <code>fact_content_daily_performance</code> and <code>dim_content</code>). Features are extracted from Days 1–30 (<code>imp_prev30</code>), while target outcomes are evaluated on Days 31–60 (<code>imp_last30</code>).
+        </p>
+        <div class="callout-box">
+            <strong>Public Safety & Anonymization Guardrails:</strong>
+            <ul>
+                <li>Pages with zero prior impressions (<code>imp_prev30 = 0</code>) are strictly excluded by contract.</li>
+                <li>All client entities are pseudonymized using <code>client_hash_id</code>. No raw domain names, URLs, client identities, or proprietary search query strings exist in the workspace or outputs.</li>
+                <li>Label-derived metrics (such as <code>imp_last30</code>, <code>trend_direction</code>, and <code>trend_pct</code>) are excluded from feature matrices to guarantee zero target leakage.</li>
+            </ul>
+        </div>
+    </section>
 
-    <h2>3. Methodology & Validation Design</h2>
-    <p>Target decay is defined as a measured >20% drop in impressions during the target period (<code>is_declining = 1</code>). To evaluate zero-shot domain generalization, models were trained using 5-fold cross-validation grouped strictly by <code>client_hash_id</code>. Empirical correlation checks confirmed no feature exceeded <code>|r| > 0.16</code> with the label target, verifying zero temporal leakage.</p>
+    <section>
+        <h2>3. Methodology & Validation Design</h2>
+        <p>
+            Target decay is defined as a measured >20% drop in organic impressions during the target window (<code>is_declining = 1</code>). To prevent client-level domain memorization and evaluate true zero-shot generalization on unseen client websites, all models were evaluated using 5-fold cross-validation grouped strictly by <code>client_hash_id</code> (<code>GroupKFold</code>).
+        </p>
+        <p>
+            Empirical correlation checks confirmed that all engineered features—including log impression scale (<code>log_imp_prev30</code>), active indexing days (<code>days_with_impressions</code>), and staleness age (<code>days_since_last_update</code>)—maintained feature-to-label Pearson correlations between <code>+0.0115</code> and <code>+0.1598</code>, verifying zero temporal leakage.
+        </p>
+    </section>
 
-    <h2>4. Results (vs Baseline)</h2>
-    <p>Models evaluated under <code>GroupKFold</code> cross-validation produced the following comparative receipts:</p>
+    <section>
+        <h2>4. Results (vs Baseline)</h2>
+        <p>
+            Evaluated on identical 5-fold <code>GroupKFold</code> cross-validation splits across 175,205 scored content items, both tree ensemble architectures delivered a substantial performance lift over the Week 4 rule baseline:
+        </p>
 
-    <table>
-        <thead>
-            <tr>
-                <th>Model / Strategy</th>
-                <th>Average Precision (PR-AUC)</th>
-                <th>ROC-AUC Score</th>
-                <th>AP Std Dev</th>
-            </tr>
-        </thead>
-        <tbody>
-            <tr>
-                <td><strong>Week 4 Rule Baseline</strong></td>
-                <td>0.998828</td>
-                <td>0.903117</td>
-                <td>0.000309</td>
-            </tr>
-            <tr>
-                <td><strong>Random Forest (Grouped)</strong></td>
-                <td>0.999659</td>
-                <td>0.967508</td>
-                <td>0.000102</td>
-            </tr>
-            <tr>
-                <td><strong>LightGBM (Grouped)</strong></td>
-                <td><strong>0.999733</strong></td>
-                <td><strong>0.973368</strong></td>
-                <td>0.000104</td>
-            </tr>
-        </tbody>
-    </table>
+        <div class="table-wrapper">
+            <table>
+                <thead>
+                    <tr>
+                        <th>Model / Strategy</th>
+                        <th>Average Precision (PR-AUC)</th>
+                        <th>ROC-AUC Score</th>
+                        <th>AP Std Dev</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr>
+                        <td><strong>Week 4 Rule Baseline</strong></td>
+                        <td>0.998828</td>
+                        <td>0.903117</td>
+                        <td>0.000309</td>
+                    </tr>
+                    <tr>
+                        <td><strong>Random Forest (Grouped)</strong></td>
+                        <td>0.999659</td>
+                        <td>0.967508</td>
+                        <td>0.000102</td>
+                    </tr>
+                    <tr>
+                        <td><strong>LightGBM (Grouped)</strong></td>
+                        <td><strong>0.999733</strong></td>
+                        <td><strong>0.973368</strong></td>
+                        <td><strong>0.000104</strong></td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+        <p>
+            <strong>Key takeaway:</strong> LightGBM yielded a <strong>+0.070251 lift in ROC-AUC</strong> over the hand-crafted rule baseline, proving that non-linear feature interactions far better separate decaying assets from stable pages across unseen client domains.
+        </p>
+    </section>
 
-    <h2>5. Limitations & Honest Framing</h2>
-    <p>Model outputs provide directional <em>decision-support probability queues</em>, not deterministic rank recovery guarantees. External factors—such as Google SERP layout changes (AI Overviews), technical canonical errors, or lost backlinks—are unobserved by feature vectors and require human-in-the-loop review.</p>
+    <section>
+        <h2>5. Limitations & Honest Framing</h2>
+        <ul>
+            <li><strong>Decision-Support Scope:</strong> Model outputs represent directional probability scores and decision-support recommendation queues, not deterministic rank forecasts.</li>
+            <li><strong>Unobserved External Variables:</strong> External search factors—such as Google SERP layout changes (AI Overviews), technical canonical errors, or competitor backlink acquisition—are unobserved by GSC feature inputs and require human validation.</li>
+        </ul>
+    </section>
 
-    <h2>6. Content Action Playbook</h2>
-    <p>Scored probabilities are operationalized into calibrated action tiers using empirical quantile cutoffs:</p>
+    <section>
+        <h2>6. Ranked Recommendations (Action Playbook)</h2>
+        <p>
+            Model probabilities are mapped into a calibrated 3-tier content action taxonomy using empirical quantile cutoffs:
+        </p>
 
-    <table>
-        <thead>
-            <tr>
-                <th>Action Label</th>
-                <th>Reason Code</th>
-                <th>Portfolio Share</th>
-                <th>Description</th>
-            </tr>
-        </thead>
-        <tbody>
-            <tr>
-                <td><span class="badge badge-refresh">IMMEDIATE_REFRESH</span></td>
-                <td><code>STALE_HIGH_TRAFFIC_DECAY</code></td>
-                <td>24.42%</td>
-                <td>High-priority decay assets (>180d stale). Requires immediate copy update and recrawl.</td>
-            </tr>
-            <tr>
-                <td><span class="badge badge-update">SCHEDULED_UPDATE</span></td>
-                <td><code>STALE_MODERATE_DECAY</code></td>
-                <td>20.98%</td>
-                <td>Moderate decay risk (>90d stale). Queued for routine quarterly review.</td>
-            </tr>
-            <tr>
-                <td><span class="badge badge-monitor">MONITOR</span></td>
-                <td><code>STABLE_NO_ACTION</code></td>
-                <td>54.60%</td>
-                <td>Stable performance or recent updates. No editorial effort required.</td>
-            </tr>
-        </tbody>
-    </table>
+        <div class="table-wrapper">
+            <table>
+                <thead>
+                    <tr>
+                        <th>Action Label</th>
+                        <th>Reason Code</th>
+                        <th>Portfolio Share</th>
+                        <th>Recommended Action</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr>
+                        <td><span class="badge badge-refresh">IMMEDIATE_REFRESH</span></td>
+                        <td><code>STALE_HIGH_TRAFFIC_DECAY</code></td>
+                        <td>24.42%</td>
+                        <td>Urgent decay assets (>180d stale). Perform immediate editorial copy refresh and submit for recrawl.</td>
+                    </tr>
+                    <tr>
+                        <td><span class="badge badge-update">SCHEDULED_UPDATE</span></td>
+                        <td><code>STALE_MODERATE_DECAY</code></td>
+                        <td>20.98%</td>
+                        <td>Moderate decay risk (>90d stale). Queued for routine quarterly content maintenance.</td>
+                    </tr>
+                    <tr>
+                        <td><span class="badge badge-monitor">MONITOR</span></td>
+                        <td><code>STABLE_NO_ACTION</code></td>
+                        <td>54.60%</td>
+                        <td>Stable performance or recent updates. No editorial resources required.</td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
 
-    <h3>No-Go Automation Rules</h3>
-    <ul>
-        <li><strong>No Auto-Publishing:</strong> AI systems must never auto-edit and publish live website copy without human approval.</li>
-        <li><strong>No Automated Deletions:</strong> Sunsetting, un-indexing, or redirecting URLs without human review is prohibited.</li>
-        <li><strong>Protected Content:</strong> Legal policies and core brand terms are strictly excluded from automated text edits.</li>
-    </ul>
+        <h3>The No-Go Automation Rules</h3>
+        <p>To prevent content degradation and brand risk, the following tasks are strictly prohibited from full AI automation:</p>
+        <ul>
+            <li><strong>No Auto-Publishing:</strong> AI systems must never automatically publish live website copy without human editorial sign-off.</li>
+            <li><strong>No Page Sunsetting/Deletions:</strong> Automated removal, un-indexing, or 301 redirection without human oversight is forbidden.</li>
+            <li><strong>Protected Pages:</strong> Legal terms, privacy policies, and brand safety content must never be altered by automated scripts.</li>
+        </ul>
+    </section>
 
-    <h2>7. Reproducibility & Artifacts</h2>
-    <p>All pipeline code, cross-validation scripts, and exported receipts are committed to the public repository:</p>
-    <ul>
-        <li><a href="https://github.com/Ewanjohndennis/flyrankml/blob/main/work/notebooks/capstone.ipynb" target="_blank">Capstone Execution Notebook (capstone.ipynb)</a></li>
-        <li><a href="https://github.com/Ewanjohndennis/flyrankml/blob/main/work/output/playbook_metrics.json" target="_blank">Metrics Receipt (playbook_metrics.json)</a></li>
-    </ul>
+    <section>
+        <h2>7. Reproducibility & Code Repository</h2>
+        <p>All pipeline code, cross-validation scripts, and exported receipts are committed to the public repository:</p>
+        <ul>
+            <li><a href="https://github.com/Ewanjohndennis/flyrankml/blob/main/work/notebooks/capstone.ipynb" target="_blank">Capstone Execution Notebook (capstone.ipynb)</a></li>
+            <li><a href="https://github.com/Ewanjohndennis/flyrankml/blob/main/work/capstone_report.md" target="_blank">Markdown Research Report (capstone_report.md)</a></li>
+            <li><a href="https://github.com/Ewanjohndennis/flyrankml/blob/main/work/outputs/playbook_metrics.json" target="_blank">Metrics Receipt (playbook_metrics.json)</a></li>
+        </ul>
+    </section>
 
-    <footer>
-        <p>Built on the <a href="https://flyrank.ai" target="_blank">FlyRank ML Internship dataset</a> &bull; Independent Machine Learning Research Paper</p>
-    </footer>
+</main>
 
-</div>
+<footer>
+    <div class="container">
+        <p>Built on the <a href="https://flyrank.ai" target="_blank">FlyRank ML Internship dataset</a> &bull; Machine Learning Research Paper &bull; August 2026</p>
+    </div>
+</footer>
 
 </body>
 </html>
