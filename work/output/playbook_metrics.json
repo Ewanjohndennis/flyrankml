@@ -1,0 +1,10 @@
+{
+  "evaluation_month": "2026-03",
+  "total_scored_rows": 175205,
+  "action_counts": {
+    "IMMEDIATE_REFRESH": 41904,
+    "SCHEDULED_UPDATE": 37816,
+    "MONITOR": 95485
+  },
+  "mean_model_score": 98.96863582660312
+}
