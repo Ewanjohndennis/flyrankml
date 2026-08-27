@@ -104,18 +104,27 @@
     <div class="container">
         <h1>Predicting Search Visibility Decay & Automated Opportunity Scoring on Portfolio-Scale Content</h1>
         <div class="meta">
-            Published: March 2026 &bull; Lane 2: Content Refresh Opportunity Scoring &bull; FlyRank ML Capstone
+            Published: August 2026 &bull; Lane 2: Content Refresh Opportunity Scoring &bull; FlyRank ML Capstone
         </div>
         <div class="abstract">
             <strong>Abstract:</strong> Search engine optimization teams encounter operational bottlenecks when identifying decaying content across large domains. Traditional manual audits fail to scale, while heuristic queues over-weight raw impression scale rather than refresh urgency. We engineered non-linear decay signals from historical impression volume, indexing frequency, and content age, training a Random Forest classifier evaluated under strict client-grouped cross-validation (<code>GroupKFold</code>). The model achieved an observed Average Precision (PR-AUC) of <strong>0.999654</strong> and ROC-AUC of <strong>0.967390</strong>, significantly outperforming rule baselines. Outputs were deployed into a 3-tier content decision-support playbook (<code>IMMEDIATE_REFRESH</code>: 24.42%, <code>SCHEDULED_UPDATE</code>: 20.98%, <code>MONITOR</code>: 54.60%).
         </div>
     </div>
+    
 </header>
 
 <div class="container">
 
     <h2>1. Introduction & Problem Statement</h2>
-    <p>Managing search visibility across multi-client enterprise domain portfolios requires proactive content maintenance. Standard heuristic algorithms rank pages primarily by historical impression magnitude. Consequently, high-traffic evergreen pages hit upper score caps regardless of actual decay, while moderate-traffic URLs experiencing rapid decay remain unflagged.</p>
+    <p>This research evaluates automated content refresh scoring using production 
+  search data from the <strong>FlyRank ML Internship dataset</strong>. Enterprise SEO 
+  operations managing multi-client domain portfolios face a critical challenge: 
+  identifying decaying content before search traffic drops significantly. 
+  Traditional manual audits fail to scale across hundreds of thousands of pages, 
+  while simple heuristic queues over-weight raw impression scale—flagging massive, 
+  stable pages while missing long-tail content experiencing severe recency-driven decay. 
+  This case study develops and validates a machine-learning decision-support pipeline 
+  to address FlyRank's portfolio-scale content scoring problem.</p>
 
     <h2>2. Data & Safety Controls</h2>
     <p>The dataset evaluates snapshot <code>month=2026-03</code> from the FlyRank ML Warehouse (<code>fact_content_daily_performance</code> and <code>dim_content</code>). Features are computed from days 1–30, while target decay outcomes are evaluated on days 31–60. Unindexed pages (<code>imp_prev30 = 0</code>) are excluded by contract. All client identifiers are hashed (<code>client_hash_id</code>), ensuring zero client domain leakage or private data exposure.</p>
