@@ -1,0 +1,218 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Predicting Search Visibility Decay & Opportunity Scoring | Research Paper</title>
+    <style>
+        :root {
+            --primary: #0f172a;
+            --accent: #2563eb;
+            --bg: #f8fafc;
+            --surface: #ffffff;
+            --text: #334155;
+            --border: #e2e8f0;
+        }
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, sans-serif;
+            line-height: 1.7;
+            color: var(--text);
+            background: var(--bg);
+            margin: 0;
+            padding: 0;
+        }
+        .container {
+            max-width: 900px;
+            margin: 0 auto;
+            padding: 2rem 1.5rem;
+        }
+        header {
+            background: var(--surface);
+            border-bottom: 1px solid var(--border);
+            padding: 3rem 0;
+            margin-bottom: 2rem;
+        }
+        h1 {
+            color: var(--primary);
+            font-size: 2.25rem;
+            line-height: 1.25;
+            margin-bottom: 1rem;
+        }
+        .meta {
+            font-size: 0.9rem;
+            color: #64748b;
+            margin-bottom: 1.5rem;
+        }
+        .abstract {
+            background: #f1f5f9;
+            border-left: 4px solid var(--accent);
+            padding: 1.25rem;
+            border-radius: 0 8px 8px 0;
+            margin-bottom: 2rem;
+            font-size: 1.05rem;
+        }
+        h2 {
+            color: var(--primary);
+            border-bottom: 2px solid var(--border);
+            padding-bottom: 0.5rem;
+            margin-top: 2.5rem;
+        }
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            margin: 1.5rem 0;
+            background: var(--surface);
+            border-radius: 8px;
+            overflow: hidden;
+            box-shadow: 0 1px 3px rgba(0,0,0,0.1);
+        }
+        th, td {
+            padding: 0.75rem 1rem;
+            text-align: left;
+            border-bottom: 1px solid var(--border);
+        }
+        th {
+            background: #f1f5f9;
+            color: var(--primary);
+            font-weight: 600;
+        }
+        .badge {
+            display: inline-block;
+            padding: 0.25rem 0.5rem;
+            border-radius: 4px;
+            font-size: 0.8rem;
+            font-weight: 600;
+        }
+        .badge-refresh { background: #fee2e2; color: #991b1b; }
+        .badge-update { background: #fef3c7; color: #92400e; }
+        .badge-monitor { background: #dcfce7; color: #166534; }
+        footer {
+            margin-top: 4rem;
+            padding: 2rem 0;
+            border-top: 1px solid var(--border);
+            font-size: 0.9rem;
+            color: #64748b;
+            text-align: center;
+        }
+        footer a { color: var(--accent); text-decoration: none; }
+        footer a:hover { text-decoration: underline; }
+    </style>
+</head>
+<body>
+
+<header>
+    <div class="container">
+        <h1>Predicting Search Visibility Decay & Automated Opportunity Scoring on Portfolio-Scale Content</h1>
+        <div class="meta">
+            Published: March 2026 &bull; Lane 2: Content Refresh Opportunity Scoring &bull; FlyRank ML Capstone
+        </div>
+        <div class="abstract">
+            <strong>Abstract:</strong> Search engine optimization teams encounter operational bottlenecks when identifying decaying content across large domains. Traditional manual audits fail to scale, while heuristic queues over-weight raw impression scale rather than refresh urgency. We engineered non-linear decay signals from historical impression volume, indexing frequency, and content age, training a Random Forest classifier evaluated under strict client-grouped cross-validation (<code>GroupKFold</code>). The model achieved an observed Average Precision (PR-AUC) of <strong>0.999654</strong> and ROC-AUC of <strong>0.967390</strong>, significantly outperforming rule baselines. Outputs were deployed into a 3-tier content decision-support playbook (<code>IMMEDIATE_REFRESH</code>: 24.42%, <code>SCHEDULED_UPDATE</code>: 20.98%, <code>MONITOR</code>: 54.60%).
+        </div>
+    </div>
+</header>
+
+<div class="container">
+
+    <h2>1. Introduction & Problem Statement</h2>
+    <p>Managing search visibility across multi-client enterprise domain portfolios requires proactive content maintenance. Standard heuristic algorithms rank pages primarily by historical impression magnitude. Consequently, high-traffic evergreen pages hit upper score caps regardless of actual decay, while moderate-traffic URLs experiencing rapid decay remain unflagged.</p>
+
+    <h2>2. Data & Safety Controls</h2>
+    <p>The dataset evaluates snapshot <code>month=2026-03</code> from the FlyRank ML Warehouse (<code>fact_content_daily_performance</code> and <code>dim_content</code>). Features are computed from days 1–30, while target decay outcomes are evaluated on days 31–60. Unindexed pages (<code>imp_prev30 = 0</code>) are excluded by contract. All client identifiers are hashed (<code>client_hash_id</code>), ensuring zero client domain leakage or private data exposure.</p>
+
+    <h2>3. Methodology & Validation Design</h2>
+    <p>Target decay is defined as a measured >20% drop in impressions during the target period (<code>is_declining = 1</code>). To evaluate zero-shot domain generalization, models were trained using 5-fold cross-validation grouped strictly by <code>client_hash_id</code>. Empirical correlation checks confirmed no feature exceeded <code>|r| > 0.16</code> with the label target, verifying zero temporal leakage.</p>
+
+    <h2>4. Results (vs Baseline)</h2>
+    <p>Models evaluated under <code>GroupKFold</code> cross-validation produced the following comparative receipts:</p>
+
+    <table>
+        <thead>
+            <tr>
+                <th>Model / Strategy</th>
+                <th>Average Precision (PR-AUC)</th>
+                <th>ROC-AUC Score</th>
+                <th>AP Std Dev</th>
+            </tr>
+        </thead>
+        <tbody>
+            <tr>
+                <td><strong>Week 4 Rule Baseline</strong></td>
+                <td>0.998828</td>
+                <td>0.903117</td>
+                <td>0.000309</td>
+            </tr>
+            <tr>
+                <td><strong>Random Forest (Grouped)</strong></td>
+                <td>0.999659</td>
+                <td>0.967508</td>
+                <td>0.000102</td>
+            </tr>
+            <tr>
+                <td><strong>LightGBM (Grouped)</strong></td>
+                <td><strong>0.999733</strong></td>
+                <td><strong>0.973368</strong></td>
+                <td>0.000104</td>
+            </tr>
+        </tbody>
+    </table>
+
+    <h2>5. Limitations & Honest Framing</h2>
+    <p>Model outputs provide directional <em>decision-support probability queues</em>, not deterministic rank recovery guarantees. External factors—such as Google SERP layout changes (AI Overviews), technical canonical errors, or lost backlinks—are unobserved by feature vectors and require human-in-the-loop review.</p>
+
+    <h2>6. Content Action Playbook</h2>
+    <p>Scored probabilities are operationalized into calibrated action tiers using empirical quantile cutoffs:</p>
+
+    <table>
+        <thead>
+            <tr>
+                <th>Action Label</th>
+                <th>Reason Code</th>
+                <th>Portfolio Share</th>
+                <th>Description</th>
+            </tr>
+        </thead>
+        <tbody>
+            <tr>
+                <td><span class="badge badge-refresh">IMMEDIATE_REFRESH</span></td>
+                <td><code>STALE_HIGH_TRAFFIC_DECAY</code></td>
+                <td>24.42%</td>
+                <td>High-priority decay assets (>180d stale). Requires immediate copy update and recrawl.</td>
+            </tr>
+            <tr>
+                <td><span class="badge badge-update">SCHEDULED_UPDATE</span></td>
+                <td><code>STALE_MODERATE_DECAY</code></td>
+                <td>20.98%</td>
+                <td>Moderate decay risk (>90d stale). Queued for routine quarterly review.</td>
+            </tr>
+            <tr>
+                <td><span class="badge badge-monitor">MONITOR</span></td>
+                <td><code>STABLE_NO_ACTION</code></td>
+                <td>54.60%</td>
+                <td>Stable performance or recent updates. No editorial effort required.</td>
+            </tr>
+        </tbody>
+    </table>
+
+    <h3>No-Go Automation Rules</h3>
+    <ul>
+        <li><strong>No Auto-Publishing:</strong> AI systems must never auto-edit and publish live website copy without human approval.</li>
+        <li><strong>No Automated Deletions:</strong> Sunsetting, un-indexing, or redirecting URLs without human review is prohibited.</li>
+        <li><strong>Protected Content:</strong> Legal policies and core brand terms are strictly excluded from automated text edits.</li>
+    </ul>
+
+    <h2>7. Reproducibility & Artifacts</h2>
+    <p>All pipeline code, cross-validation scripts, and exported receipts are committed to the public repository:</p>
+    <ul>
+        <li><a href="https://github.com/Ewanjohndennis/flyrankml/blob/main/work/notebooks/capstone.ipynb" target="_blank">Capstone Execution Notebook (capstone.ipynb)</a></li>
+        <li><a href="https://github.com/Ewanjohndennis/flyrankml/blob/main/work/output/playbook_metrics.json" target="_blank">Metrics Receipt (playbook_metrics.json)</a></li>
+    </ul>
+
+    <footer>
+        <p>Built on the <a href="https://flyrank.ai" target="_blank">FlyRank ML Internship dataset</a> &bull; Independent Machine Learning Research Paper</p>
+    </footer>
+
+</div>
+
+</body>
+</html>
